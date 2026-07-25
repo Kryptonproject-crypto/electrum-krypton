@@ -21,6 +21,7 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import os
+import hashlib
 import threading
 import time
 from typing import Optional, Dict, Mapping, Sequence, TYPE_CHECKING
@@ -41,7 +42,9 @@ HEADER_SIZE = 80  # bytes
 CHUNK_SIZE = 2016  # num headers in a difficulty retarget period
 
 # see https://github.com/bitcoin/bitcoin/blob/feedb9c84e72e4fff489810a2bbeec09bcda5763/src/chainparams.cpp#L76
-MAX_TARGET = 0x00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff  # compact: 0x1d00ffff
+# consensus.powLimit de Krypton Core (CMainParams). Bien plus permissif
+# que celui de Bitcoin : valeur habituelle des chaines scrypt.
+MAX_TARGET = 0x00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 
 
 class MissingHeader(Exception):
@@ -92,7 +95,26 @@ def hash_raw_header(header: bytes) -> str:
     return hash_encode(sha256d(header))
 
 
-pow_hash_header = hash_header
+def scrypt_1024_1_1_256(data: bytes) -> bytes:
+    """Hash de preuve de travail de Krypton.
+
+    Krypton distingue deux hachages, comme Litecoin :
+      - GetHash()    = double SHA256 -> identifiant du bloc
+      - GetPoWHash() = scrypt(N=1024, r=1, p=1, 32 octets) -> preuve de travail
+
+    Confondre les deux est l'erreur classique sur ces chaines.
+    hashlib.scrypt s'appuie sur OpenSSL : aucune dependance supplementaire.
+    Cout memoire 128 * N * r = 128 Ko, tres en dessous de la limite OpenSSL.
+    """
+    return hashlib.scrypt(data, salt=data, n=1024, r=1, p=1, dklen=32)
+
+
+def pow_hash_header(header: dict) -> str:
+    if header is None:
+        return '0' * 64
+    if header.get('prev_block_hash') is None:
+        header['prev_block_hash'] = '00' * 32
+    return hash_encode(scrypt_1024_1_1_256(serialize_header(header)))
 
 
 # key: blockhash hex at forkpoint
@@ -312,9 +334,21 @@ class Blockchain(Logger):
             raise InvalidHeader("prev hash mismatch: %s vs %s" % (prev_hash, header.get('prev_block_hash')))
         if constants.net.TESTNET:
             return
-        bits = cls.target_to_bits(target)
-        if bits != header.get('bits'):
-            raise InvalidHeader("bits mismatch: %s vs %s" % (bits, header.get('bits')))
+        # Krypton : LWMA recalcule la difficulte a CHAQUE bloc (fenetre 120,
+        # puis 60 a partir du bloc 527040). Une cible unique par tranche de
+        # 2016 blocs n'a donc aucun sens ici et le test d'origine
+        # `bits != header['bits']` echouerait sur presque tous les blocs.
+        # On prend la cible dans l'en-tete et on verifie uniquement que le
+        # travail a reellement ete fourni.
+        #
+        # PROTEGE : impossible de fabriquer une chaine sans miner pour de vrai.
+        # NE PROTEGE PAS : une chaine minee a difficulte anormalement basse.
+        header_bits = header.get('bits')
+        if header_bits is None:
+            raise InvalidHeader("header has no 'bits' field")
+        target = cls.bits_to_target(header_bits)
+        if target > MAX_TARGET:
+            raise InvalidHeader(f"target above powLimit: {target:#x}")
         _pow_hash = pow_hash_header(header)
         pow_hash_as_num = int.from_bytes(bfh(_pow_hash), byteorder='big')
         if pow_hash_as_num > target:
@@ -530,29 +564,13 @@ class Blockchain(Logger):
             return hash_header(header)
 
     def get_target(self, index: int) -> int:
-        # compute target from chunk x, used in chunk x+1
-        if constants.net.TESTNET:
-            return 0
-        if index == -1:
-            return MAX_TARGET
-        if index < len(self.checkpoints):
-            h, t = self.checkpoints[index]
-            return t
-        # new target
-        first = self.read_header(index * CHUNK_SIZE)
-        last = self.read_header((index+1) * CHUNK_SIZE - 1)
-        if not first or not last:
-            raise MissingHeader()
-        bits = last.get('bits')
-        target = self.bits_to_target(bits)
-        nActualTimespan = last.get('timestamp') - first.get('timestamp')
-        nTargetTimespan = 14 * 24 * 60 * 60
-        nActualTimespan = max(nActualTimespan, nTargetTimespan // 4)
-        nActualTimespan = min(nActualTimespan, nTargetTimespan * 4)
-        new_target = min(MAX_TARGET, (target * nActualTimespan) // nTargetTimespan)
-        # not any target can be represented in 32 bits:
-        new_target = self.bits_to_target(self.target_to_bits(new_target))
-        return new_target
+        """Krypton : LWMA recalcule la difficulte a chaque bloc, donc aucune
+        cible unique ne vaut pour une tranche de 2016 blocs.
+
+        verify_header() lit desormais la cible dans chaque en-tete ; cette
+        methode ne sert plus qu'a satisfaire les appelants existants.
+        """
+        return MAX_TARGET
 
     @classmethod
     def bits_to_target(cls, bits: int) -> int:

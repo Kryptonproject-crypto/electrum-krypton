@@ -147,38 +147,51 @@ class BitcoinMainnet(AbstractNet):
 
     NET_NAME = "mainnet"
     TESTNET = False
-    WIF_PREFIX = 0x80
-    ADDRTYPE_P2PKH = 0
-    ADDRTYPE_P2SH = 5
-    SEGWIT_HRP = "bc"
-    BOLT11_HRP = SEGWIT_HRP
-    GENESIS = "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"
-    DEFAULT_PORTS = {'t': '50001', 's': '50002'}
-    BLOCK_HEIGHT_FIRST_LIGHTNING_CHANNELS = 497000
 
+    # base58Prefixes[SECRET_KEY] = 173
+    WIF_PREFIX = 0xad
+    # base58Prefixes[PUBKEY_ADDRESS] = 45  -> adresses en 'K'
+    ADDRTYPE_P2PKH = 45
+    # base58Prefixes[SCRIPT_ADDRESS] = 23  -> P2SH en 'A'
+    ADDRTYPE_P2SH = 23
+    # bech32_hrp = "kyp"  -> adresses natives kyp1...
+    SEGWIT_HRP = "kyp"
+    BOLT11_HRP = SEGWIT_HRP
+
+    GENESIS = "1dac3550cb926b7a44df033bf6bcac3660da63612376816f92c2de2c36d9edf6"
+
+    DEFAULT_PORTS = {'t': '50001', 's': '50002'}
+
+    # Lightning n'existe pas sur Krypton : hauteur volontairement hors d'atteinte.
+    BLOCK_HEIGHT_FIRST_LIGHTNING_CHANNELS = 999999999
+
+    # 'standard' reprend Krypton Core (kpub/kprv). Krypton Core ne definit
+    # aucun equivalent aux ypub/zpub : les variantes segwit gardent donc les
+    # valeurs Bitcoin. Ces octets sont ecrits dans les fichiers wallet, les
+    # changer plus tard casserait les wallets existants.
     XPRV_HEADERS = {
-        'standard':    0x0488ade4,  # xprv
-        'p2wpkh-p2sh': 0x049d7878,  # yprv
-        'p2wsh-p2sh':  0x0295b005,  # Yprv
-        'p2wpkh':      0x04b2430c,  # zprv
-        'p2wsh':       0x02aa7a99,  # Zprv
+        'standard':    0x038f2ef4,  # kprv (Krypton Core)
+        'p2wpkh-p2sh': 0x049d7878,  # yprv (valeur Bitcoin)
+        'p2wsh-p2sh':  0x0295b005,  # Yprv (valeur Bitcoin)
+        'p2wpkh':      0x04b2430c,  # zprv (valeur Bitcoin)
+        'p2wsh':       0x02aa7a99,  # Zprv (valeur Bitcoin)
     }
     XPRV_HEADERS_INV = inv_dict(XPRV_HEADERS)
     XPUB_HEADERS = {
-        'standard':    0x0488b21e,  # xpub
-        'p2wpkh-p2sh': 0x049d7cb2,  # ypub
-        'p2wsh-p2sh':  0x0295b43f,  # Ypub
-        'p2wpkh':      0x04b24746,  # zpub
-        'p2wsh':       0x02aa7ed3,  # Zpub
+        'standard':    0x038f332e,  # kpub (Krypton Core)
+        'p2wpkh-p2sh': 0x049d7cb2,  # ypub (valeur Bitcoin)
+        'p2wsh-p2sh':  0x0295b43f,  # Ypub (valeur Bitcoin)
+        'p2wpkh':      0x04b24746,  # zpub (valeur Bitcoin)
+        'p2wsh':       0x02aa7ed3,  # Zpub (valeur Bitcoin)
     }
     XPUB_HEADERS_INV = inv_dict(XPUB_HEADERS)
-    BIP44_COIN_TYPE = 0
+
+    # SLIP-0044 : verifie libre dans le registre le 24/07/2026.
+    # Enregistrement officiel a deposer une fois ce wallet publie.
+    BIP44_COIN_TYPE = 8369
+
     LN_REALM_BYTE = 0
-    LN_DNS_SEEDS = [
-        'nodes.lightning.directory.',
-        'lseed.bitcoinstats.com.',
-        'lseed.darosior.ninja',
-    ]
+    LN_DNS_SEEDS = []
 
     @classmethod
     def datadir_subdir(cls):
