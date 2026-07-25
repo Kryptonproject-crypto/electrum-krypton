@@ -206,7 +206,8 @@ Item {
             icon.source: '../../icons/lightning.png'
             action: Action {
                 text: qsTr('Channels');
-                enabled: Daemon.currentWallet.isLightning && app.stack.currentItem.objectName != 'Channels'
+                visible: false   // Krypton : pas de Lightning
+                enabled: false
                 onTriggered: menu.openPage(Qt.resolvedUrl('Channels.qml'))
             }
         }

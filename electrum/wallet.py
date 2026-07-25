@@ -517,13 +517,16 @@ class Abstract_Wallet(ABC, Logger, EventListener):
         return new_path
 
     def has_lightning(self) -> bool:
-        return bool(self.lnworker)
+        # Krypton n'a pas de reseau Lightning : desactive a la source, ce qui
+        # masque aussi toute l'interface Lightning cote QML (isLightning).
+        return False
 
     def has_channels(self):
         return self.lnworker is not None and len(self.lnworker._channels) > 0
 
     def can_have_lightning(self) -> bool:
         """ whether this wallet can create new channels """
+        return False   # Krypton : pas de Lightning
         # we want static_remotekey to be a wallet address
         if not self.txin_type == 'p2wpkh':
             return False

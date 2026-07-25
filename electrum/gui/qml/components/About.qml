@@ -6,7 +6,7 @@ import QtQuick.Controls.Material
 Pane {
     objectName: 'About'
 
-    property string title: qsTr("About Electrum")
+    property string title: qsTr("About Krypton Wallet")
 
     Flickable {
         anchors.fill: parent
@@ -72,7 +72,7 @@ Pane {
                 Layout.alignment: Qt.AlignRight
             }
             Label {
-                text: '<a href="https://electrum.org">https://electrum.org</a>'
+                text: '<a href="https://krypton-explorer.org">https://krypton-explorer.org</a>'
                 textFormat: Text.RichText
                 onLinkActivated: Qt.openUrlExternally(link)
             }
@@ -81,7 +81,7 @@ Pane {
                 Layout.alignment: Qt.AlignRight
             }
             Label {
-                text: 'Thomas Voegtlin\nSomberNight\nSander van Grieken\nFelix B.'
+                text: 'Krypton project\n\nBased on Electrum by\nThomas Voegtlin, SomberNight,\nSander van Grieken, Felix B.'
             }
             Item {
                 width: 1
@@ -89,7 +89,7 @@ Pane {
                 Layout.columnSpan: 2
             }
             Label {
-                text: qsTr('Distributed by Electrum Technologies GmbH')
+                text: qsTr('Krypton Wallet is a fork of Electrum, adapted for the Krypton network. It is not affiliated with Electrum Technologies GmbH.')
                 Layout.columnSpan: 2
                 Layout.alignment: Qt.AlignHCenter
             }
