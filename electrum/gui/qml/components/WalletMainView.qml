@@ -201,16 +201,7 @@ Item {
                 enabled: app.stack.currentItem.objectName != 'Addresses'
             }
         }
-        MenuItem {
-            icon.color: action.enabled ? 'transparent' : Material.iconDisabledColor
-            icon.source: '../../icons/lightning.png'
-            action: Action {
-                text: qsTr('Channels');
-                visible: false   // Krypton : pas de Lightning
-                enabled: false
-                onTriggered: menu.openPage(Qt.resolvedUrl('Channels.qml'))
-            }
-        }
+        // Krypton : pas de reseau Lightning, entree 'Channels' retiree
 
         MenuItem {
             icon.color: action.enabled ? 'transparent' : Material.iconDisabledColor
