@@ -81,7 +81,9 @@ Pane {
                 Layout.alignment: Qt.AlignRight
             }
             Label {
-                text: 'Krypton project\n\nBased on Electrum by\nThomas Voegtlin, SomberNight,\nSander van Grieken, Felix B.'
+                text: 'Krypton project\nBased on Electrum by Thomas Voegtlin,\nSomberNight, Sander van Grieken, Felix B.'
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
             }
             Item {
                 width: 1
@@ -89,9 +91,13 @@ Pane {
                 Layout.columnSpan: 2
             }
             Label {
-                text: qsTr('Krypton Wallet is a fork of Electrum, adapted for the Krypton network. It is not affiliated with Electrum Technologies GmbH.')
+                text: qsTr('A fork of Electrum, adapted for the Krypton network. Not affiliated with Electrum Technologies GmbH.')
                 Layout.columnSpan: 2
-                Layout.alignment: Qt.AlignHCenter
+                Layout.fillWidth: true
+                Layout.maximumWidth: parent.width
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.Wrap
+                font.pixelSize: constants.fontSizeSmall
             }
         }
     }

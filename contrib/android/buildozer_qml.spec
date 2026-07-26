@@ -1,13 +1,13 @@
 [app]
 
 # (str) Title of your application
-title = Electrum
+title = Krypton Wallet
 
 # (str) Package name
-package.name = Electrum
+package.name = KryptonWallet
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.electrum
+package.domain = org.krypton
 
 # (str) Source code where the main.py live
 source.dir = .
@@ -153,7 +153,7 @@ android.accept_sdk_license = True
 #android.add_jars = foo.jar,bar.jar,path/to/more/*.jar
 #android.add_jars = lib/android/zbar.jar
 
-android.add_jars = .buildozer/android/platform/*/build/libs_collections/Electrum/jar/*.jar
+android.add_jars = .buildozer/android/platform/*/build/libs_collections/KryptonWallet/jar/*.jar
 
 
 android.add_aars =

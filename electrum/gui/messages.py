@@ -102,13 +102,15 @@ MSG_LN_UTXO_RESERVE = (
 
 # not to be translated
 MSG_TERMS_OF_USE = (
-"""1. Electrum is distributed under the MIT licence by Electrum Technologies GmbH. Most notably, this means that the Electrum software is provided as is, and that it comes without warranty.
+"""1. Krypton Wallet is free software, distributed under the MIT licence. It is a fork of Electrum, adapted for the Krypton network, and is not affiliated with Electrum Technologies GmbH. The software is provided as is, without warranty of any kind.
 
-2. We are neither a bank nor a financial service provider. In addition, we do not store user account data, and we are not an intermediary in the interaction between our software and the Bitcoin blockchain. Therefore, we do not have the possibility to freeze funds or to undo a fraudulent transaction.
+2. This is not a bank and not a financial service. Your keys stay on your device: nobody else can access your funds, and nobody can freeze them or reverse a transaction. A payment sent to the wrong address is lost for good.
 
-3. We do not provide private user support. All issue resolutions are public, and take place on Github or public forums. If someone posing as 'Electrum support' proposes to help you via a private channel, this person is most likely an imposter trying to steal your bitcoins."""
+3. Back up your seed phrase. It is the only way to recover your wallet if you lose or reset your device. Write it down offline and never share it or type it into a website.
+
+4. There is no private support. Questions are answered publicly, on GitHub or in the community channels. Anyone contacting you privately claiming to be 'Krypton support' and asking for your seed phrase is trying to steal your coins."""
 )
-TERMS_OF_USE_LATEST_VERSION : int = 1  # bump this if we want users re-prompted due to changes
+TERMS_OF_USE_LATEST_VERSION : int = 2  # bump this if we want users re-prompted due to changes
 
 
 MSG_CONNECTMODE_AUTOCONNECT = _('Auto-connect')
@@ -116,18 +118,18 @@ MSG_CONNECTMODE_MANUAL = _('Manual server selection')
 MSG_CONNECTMODE_ONESERVER = _('Connect only to a single server')
 
 MSG_CONNECTMODE_SERVER_HELP = _(
-    "Electrum connects to a unique server in order to receive your transaction history. "
+    "Krypton Wallet connects to a single server in order to receive your transaction history. "
     "This server will learn your wallet addresses."
 )
 MSG_CONNECTMODE_NODES_HELP = _(
-    "In addition to your history server, Electrum will try to maintain connections with ~10 extra servers, in order to download block headers and find out the longest blockchain. "
+    "In addition to your history server, Krypton Wallet will try to maintain connections with extra servers, in order to download block headers and find out the longest blockchain. "
     "These servers are only used for block header notifications and fee estimates; they do not learn your wallet addresses. "
     "Getting block headers from multiple sources is useful to detect lagging servers and forks. "
     "Fork detection is security-critical for determining number of confirmations."
 )
 
 MSG_CONNECTMODE_AUTOCONNECT_HELP = _(
-    "Electrum will always use a history server that is on the longest blockchain. "
+    "Krypton Wallet will always use a history server that is on the longest blockchain. "
     "If your current server is unresponsive or lagging, Electrum will switch to another server."
 )
 
