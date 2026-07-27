@@ -131,7 +131,10 @@ def filter_noonion(servers):
 def filter_protocol(hostmap, *, allowed_protocols: Iterable[str] = None) -> Sequence[ServerAddr]:
     """Filters the hostmap for those implementing protocol."""
     if allowed_protocols is None:
-        allowed_protocols = {PREFERRED_NETWORK_PROTOCOL}
+        # Krypton : TCP autorise en plus de TLS. Le serveur Krypton est
+        # en TCP simple ; en ne gardant que 's', la liste des serveurs
+        # eligibles est vide et le demarrage echoue.
+        allowed_protocols = {PREFERRED_NETWORK_PROTOCOL, 't'}
     eligible = []
     for host, portmap in hostmap.items():
         for protocol in allowed_protocols:
@@ -357,7 +360,8 @@ class Network(Logger, NetworkRetryManager[ServerAddr]):
             self._set_preferred_chain(None)
         self._blockchain = blockchain.get_best_chain()
 
-        self._allowed_protocols = {PREFERRED_NETWORK_PROTOCOL}
+        # Krypton : voir le commentaire plus haut, meme raison.
+        self._allowed_protocols = {PREFERRED_NETWORK_PROTOCOL, 't'}
 
         self.proxy = ProxySettings()
         self.is_proxy_tor = None  # type: Optional[bool]  # tri-state. None means unknown.
