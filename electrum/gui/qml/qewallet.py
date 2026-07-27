@@ -340,7 +340,11 @@ class QEWallet(AuthMixin, QObject, QtEventListener):
     isLightningChanged = pyqtSignal()
     @pyqtProperty(bool, notify=isLightningChanged)
     def isLightning(self):
-        return bool(self.wallet.lnworker)
+        # Krypton : pas de reseau Lightning. On s'aligne sur
+        # Abstract_Wallet.has_lightning(), qui renvoie False, plutot que de
+        # tester lnworker directement -- sinon tout l'affichage Lightning
+        # (solde, canaux, boutons) reste visible cote QML.
+        return self.wallet.has_lightning()
 
     billingInfoChanged = pyqtSignal()
     @pyqtProperty('QVariantMap', notify=billingInfoChanged)
