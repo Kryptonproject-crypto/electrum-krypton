@@ -15,7 +15,10 @@ Pane {
 
     padding: 0
 
-    property var _baseunits: ['BTC','mBTC','bits','sat']
+    // Krypton : doit rester aligne sur base_units dans electrum/util.py.
+    // Cette liste est independante du Python : la changer d'un seul cote
+    // fait afficher des unites que l'autre ne connait pas.
+    property var _baseunits: ['KYP','mKYP','sat']
 
     ColumnLayout {
         anchors.fill: parent

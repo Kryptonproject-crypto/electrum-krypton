@@ -641,7 +641,9 @@ class SimpleConfig(Logger):
     NETWORK_PROXY_USER = ConfigVar('proxy_user', default=None, type_=str)
     NETWORK_PROXY_PASSWORD = ConfigVar('proxy_password', default=None, type_=str)
     NETWORK_PROXY_ENABLED = ConfigVar('enable_proxy', default=lambda config: config.NETWORK_PROXY not in [None, "none"], type_=bool)
-    NETWORK_SERVER = ConfigVar('server', default=None, type_=str)
+    # Krypton : serveur par defaut, pour que l'application se connecte
+    # au premier lancement sans saisie manuelle.
+    NETWORK_SERVER = ConfigVar('server', default='potatoes-adler.with.playit.plus:1080:t', type_=str)
     NETWORK_NOONION = ConfigVar('noonion', default=False, type_=bool)
     NETWORK_OFFLINE = ConfigVar('offline', default=False, type_=bool)
     NETWORK_SKIPMERKLECHECK = ConfigVar('skipmerklecheck', default=False, type_=bool)
