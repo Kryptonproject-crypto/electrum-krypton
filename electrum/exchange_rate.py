@@ -437,6 +437,14 @@ class CoinGecko(ExchangeBase):
                      for h in history['prices']])
 
 
+class CoinPaprika(ExchangeBase):
+
+    async def get_rates(self, ccy):
+        # Krypton (KYP) : prix depuis CoinPaprika. Seul l'USD est fourni.
+        json = await self.get_json('api.coinpaprika.com', '/v1/tickers/kyp-krypton-1')
+        return {'USD': to_decimal(json['quotes']['USD']['price'])}
+
+
 class Bit2C(ExchangeBase):
 
     async def get_rates(self, ccy):
