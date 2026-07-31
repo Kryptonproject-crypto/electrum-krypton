@@ -1,4 +1,9 @@
 {
+    "electrum.krypton-explorer.org": {
+        "pruning": "-",
+        "version": "1.6",
+        "t": "50001"
+    },
     "potatoes-adler.with.playit.plus": {
         "pruning": "-",
         "version": "1.6",
