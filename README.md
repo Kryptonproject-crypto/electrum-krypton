@@ -1,156 +1,61 @@
-# Electrum - Lightweight Bitcoin client
-
-```
-Licence: MIT Licence
-Author: Thomas Voegtlin
-Language: Python (>= 3.10)
-Homepage: https://electrum.org/
-```
-
-[![Build Status](https://github.com/spesmilo/electrum/actions/workflows/builds.yml/badge.svg?branch=master)](https://github.com/spesmilo/electrum/actions/workflows/builds.yml)
-[![Test coverage statistics](https://coveralls.io/repos/github/spesmilo/electrum/badge.svg?branch=master)](https://coveralls.io/github/spesmilo/electrum?branch=master)
-[![Help translate Electrum online](https://d322cqt584bo4o.cloudfront.net/electrum/localized.svg)](https://crowdin.com/project/electrum)
-
-
-## Getting started
-
-_(If you've come here looking to simply run Electrum,
-[you may download it here](https://electrum.org/#download).)_
-
-Electrum itself is pure Python, and so are most of the required dependencies,
-but not everything. The following sections describe how to run from source, but here
-is a TL;DR:
-
-```
-$ sudo apt-get install libsecp256k1-dev
-$ ELECTRUM_ECC_DONT_COMPILE=1 python3 -m pip install --user ".[gui,crypto]"
-```
-
-### Not pure-python dependencies
-
-#### Qt GUI
-
-If you want to use the Qt interface, install the Qt dependencies:
-```
-$ sudo apt-get install python3-pyqt6
-```
-
-#### libsecp256k1
-
-For elliptic curve operations,
-[libsecp256k1](https://github.com/bitcoin-core/secp256k1)
-is a required dependency.
-
-If you "pip install" Electrum, by default libsecp will get compiled locally,
-as part of the `electrum-ecc` dependency. This can be opted-out of,
-by setting the `ELECTRUM_ECC_DONT_COMPILE=1` environment variable.
-For the compilation to work, besides a C compiler, you need at least:
-```
-$ sudo apt-get install automake libtool
-```
-If you opt out of the compilation, you need to provide libsecp in another way, e.g.:
-```
-$ sudo apt-get install libsecp256k1-dev
-```
-
-#### cryptography
-
-Due to the need for fast symmetric ciphers,
-[cryptography](https://github.com/pyca/cryptography) is required.
-Install from your package manager (or from pip):
-```
-$ sudo apt-get install python3-cryptography
-```
-
-#### hardware-wallet support
-
-If you would like hardware wallet support,
-[see this](https://github.com/spesmilo/electrum-docs/blob/master/hardware-linux.rst).
-
-
-### Running from tar.gz
-
-If you downloaded the official package (tar.gz), you can run
-Electrum from its root directory without installing it on your
-system; all the pure python dependencies are included in the 'packages'
-directory. To run Electrum from its root directory, just do:
-```
-$ ./run_electrum
-```
-
-You can also install Electrum on your system, by running this command:
-```
-$ sudo apt-get install python3-setuptools python3-pip
-$ python3 -m pip install --user .
-```
-
-This will download and install the Python dependencies used by
-Electrum instead of using the 'packages' directory.
-It will also place an executable named `electrum` in `~/.local/bin`,
-so make sure that is on your `PATH` variable.
-
-
-### Development version (git clone)
-
-_(For OS-specific instructions, see [here for Windows](contrib/build-wine/README_windows.md),
-and [for macOS](contrib/osx/README_macos.md))_
-
-Check out the code from GitHub:
-```
-$ git clone https://github.com/spesmilo/electrum.git
-$ cd electrum
-$ git submodule update --init
-```
-
-Run install (this should install dependencies):
-```
-$ python3 -m pip install --user -e .
-```
-
-Create translations (optional):
-```
-$ sudo apt-get install gettext
-$ ./contrib/locale/build_locale.sh electrum/locale/locale electrum/locale/locale
-```
-
-Finally, to start Electrum:
-```
-$ ./run_electrum
-```
-
-### Run tests
-
-Run unit tests with `pytest`:
-```
-$ pytest tests -v
-```
-(can be parallelized with `-n auto` option, using [`pytest-xdist`](https://github.com/pytest-dev/pytest-xdist) plugin)
-
-To run a single file, specify it directly like this:
-```
-$ pytest tests/test_bitcoin.py -v
-```
-
-## Creating Binaries
-
-- [Linux (tarball)](contrib/build-linux/sdist/README.md)
-- [Linux (AppImage)](contrib/build-linux/appimage/README.md)
-- [macOS](contrib/osx/README.md)
-- [Windows](contrib/build-wine/README.md)
-- [Android](contrib/android/Readme.md)
-
-
-## Contributing
-
-Any help testing the software, reporting or fixing bugs, reviewing pull requests
-and recent changes, writing tests, or helping with outstanding issues is very welcome.
-Implementing new features, or improving/refactoring the codebase, is of course
-also welcome, but to avoid wasted effort, especially for larger changes,
-we encourage discussing these on the issue tracker or IRC first.
-
-Besides [GitHub](https://github.com/spesmilo/electrum),
-most communication about Electrum development happens on IRC, in the
-`#electrum` channel on Libera Chat. The easiest way to participate on IRC is
-with the web client, [web.libera.chat](https://web.libera.chat/#electrum).
-
-Please improve translations on [Crowdin](https://crowdin.com/project/electrum).
+Electrum-Krypton — Lightweight wallet for Krypton (KYP)
+Licence:      MIT
+Language:     Python (>= 3.10)
+Based on:     Electrum 4.8 (spesmilo/electrum)
+Coin:         Krypton (KYP)
+Platforms:    Linux · Windows · macOS · Android
+Electrum-Krypton is the official light wallet for the Krypton (KYP) blockchain. It is a fork of Electrum: fast to start, no full chain download, deterministic seed backup, and SPV verification of your own transactions against block headers.
+It talks to a KryptonX server, which indexes the chain from a Krypton full node.
+Features
+Instant sync — no need to download the blockchain; balances come from an Electrum (KryptonX) server, verified locally by SPV.
+Native SegWit — generates kyp1… (bech32, P2WPKH) addresses.
+Deterministic backup — a single seed phrase restores every address.
+Cross-platform — desktop (Linux/Windows/macOS) and Android.
+Biometric unlock and payment authentication on mobile.
+Live KYP/USD price via CoinPaprika.
+Krypton specifics
+Parameter
+Value
+Ticker
+KYP
+Address type
+Native SegWit, bech32 kyp1… (P2WPKH)
+Derivation
+m/0h (Electrum native-segwit standard), master key is a zpub
+Node P2P port
+8369
+Node RPC port
+8370
+Price feed
+CoinPaprika (kyp-krypton-1), USD
+The wallet ships with CoinPaprika as the only exchange-rate provider and USD as the fiat currency, since KYP is priced there. Other Electrum providers return Bitcoin rates and do not apply to Krypton.
+Getting started (desktop)
+Requirements
+Python ≥ 3.10 and the dependencies listed in the repo.
+git clone https://github.com/Kryptonproject-crypto/electrum-krypton.git
+cd electrum-krypton
+python3 -m pip install -r contrib/requirements/requirements.txt --user
+Run from source
+./run_electrum
+That launches the GUI. For headless / scripting use, the same binary drives a daemon:
+./run_electrum daemon -d                 # start the daemon
+./run_electrum load_wallet -w <path>     # load a wallet
+./run_electrum getbalance -w <path>      # query balance
+./run_electrum stop                      # stop the daemon
+Building the Android APK
+The Android app is a QML build produced with buildozer inside the provided Docker image. Build on an x86_64 machine with Docker (a Raspberry Pi is too limited for the Qt-for-Android toolchain).
+cd contrib/android
+# see contrib/android/Readme.md for the full, reproducible Docker build
+./make_apk.sh qml arm64-v8a release
+The app is branded Krypton Wallet (launcher name, biometric prompt, and notifications).
+Connecting to a server
+By default the wallet connects to a public KryptonX server. To run your own, set up KryptonX against a kryptond node with txindex=1, then point the wallet at its host and TCP port in the network settings.
+Restoring a wallet
+Choose restore from seed and enter your seed phrase. The wallet re-derives your kyp1… addresses, subscribes to the server, and rebuilds history and balance automatically.
+If a restored wallet shows a 0 balance while a block explorer shows funds, the server's node is almost certainly running without txindex=1 — it can return address history but not the transactions needed for SPV verification. This is a server-side configuration issue, not a wallet problem. See the KryptonX README.
+Security notes
+Your seed is the only backup. Write it down and keep it offline. Anyone with the seed controls the funds.
+The wallet verifies your transactions by SPV (Merkle proofs against block headers); it does not blindly trust the server's balance answer.
+On mobile, enable biometric authentication and payment confirmation in Preferences → Security.
+Licence
+MIT. Electrum-Krypton is a fork of Electrum (author Thomas Voegtlin and the Electrum developers), adapted to the Krypton network.
